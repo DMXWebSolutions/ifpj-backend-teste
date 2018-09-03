@@ -9,11 +9,11 @@ const notifications = require('./modules/notifications')
 
 const routes = (server) => {
     auth(server)
-    // students(server)
-    // classrooms(server)
-    // bolletin(server)
-    // teachers(server)
-    // notifications(server)
+    students(server)
+    classrooms(server)
+    bolletin(server)
+    teachers(server)
+    notifications(server)
 }
 
 module.exports = routes

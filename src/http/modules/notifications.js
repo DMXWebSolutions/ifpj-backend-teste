@@ -1,50 +1,52 @@
-const Notifications = require('../../services/mongo/models/notifications')
-const User = require('../../services/mongo/models/users')
-const db = require('../../services/mongo/index')
+// const Notifications = require('../../services/mongo/models/notifications')
+// const User = require('../../services/mongo/models/users')
 
 
-const duplicateRemove =  async () => { //Remove os dados duplicados no banco MONGODB
+const db = require('../../services/app-services')
 
-    var duplicates = [];
 
-    try {
-        let data = await Notifications.aggregate([
-            {
-                "$group": { 
-                    _id:{"title": "$title", "classroom": "$classroom", "message": "$message"},
-                    dups: { $addToSet: "$_id"},
-                    count: {$sum: 1} 
-                }
-            },
-            {
-                "$match": {
-                    count: { "$gt": 1 }
-                }
-            }
-        ])
+// const duplicateRemove =  async () => { //Remove os dados duplicados no banco MONGODB
 
-        data.forEach( doc => {
-            doc.dups.shift()
-            doc.dups.forEach( dupId => {
-                duplicates.push(dupId)
-            })
-        })
+//     var duplicates = [];
 
-        Notifications.remove({_id:{$in: duplicates}}).exec()
+//     try {
+//         let data = await Notifications.aggregate([
+//             {
+//                 "$group": { 
+//                     _id:{"title": "$title", "classroom": "$classroom", "message": "$message"},
+//                     dups: { $addToSet: "$_id"},
+//                     count: {$sum: 1} 
+//                 }
+//             },
+//             {
+//                 "$match": {
+//                     count: { "$gt": 1 }
+//                 }
+//             }
+//         ])
 
-    } catch (error) {
-        console.log(error)
-    }
-}
+//         data.forEach( doc => {
+//             doc.dups.shift()
+//             doc.dups.forEach( dupId => {
+//                 duplicates.push(dupId)
+//             })
+//         })
+
+//         Notifications.remove({_id:{$in: duplicates}}).exec()
+
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
 
 module.exports = function notifications(server) {
 
     server.post('/notifications/classroom', async (req, res, next) => {
 
-        try {
-            const notification = await Notifications.create({ ...req.body, user: req.userId})
-            duplicateRemove()
+        const { register, title, classroom, student, message, urlfile } = req.body
 
+        try {
+            const notification = await db.notifications().save(register, title, classroom, student, message, urlfile)
             res.send({ message: notification })   
             
         } catch(error) {
@@ -56,11 +58,11 @@ module.exports = function notifications(server) {
     server.get('/notifications', async (req, res, next ) => {
 
         try {
-            const notifications = await Notifications.find({}).sort({createdAt: -1}).populate(['user'])
+            const notifications = await db.notifications().FindAll()
             res.send({ notifications: notifications })
 
         } catch(error) {
-            res.send({error: error})
+            res.send(422, {error})
         }
         return next()
     })
@@ -68,7 +70,7 @@ module.exports = function notifications(server) {
     server.del('/notifications/:id', async (req, res, next ) => {
 
         const { id } = req.params
-        const notification = await Notifications.findOne({ _id: id })
+        const notification = await db.notifications().del(id) 
 
         if(!notification) {
             res.send(400, { error : 'Notificação não encontrada'})
@@ -83,12 +85,10 @@ module.exports = function notifications(server) {
     })
 
     server.get('/notifications/:classroom', async (req, res, next ) => {
-
         const { classroom } = req.params 
-        const classe = classroom.toString();
 
         try {
-            const notifications = await Notifications.find({ classroom: classe }).sort({createdAt: -1}).populate(['user'])
+            const notifications = await db.notifications().FindByClass(classroom)
             res.send({ notifications: notifications })
         } catch(error) {
             res.send({error: error})
@@ -97,30 +97,15 @@ module.exports = function notifications(server) {
     })
     
     server.get('/notifications/teacher/:register', async (req, res, next ) => {
-
         const { register } = req.params 
-
+        
         try {
-            const user = await User.findOne({ register })
-            const notifications = await Notifications.find({ user: user._id}).sort({createdAt: -1}).populate(['user'])
+            const notifications = await db.notifications().FindByRegister(register)
             res.send({ notifications: notifications })
 
         } catch(error) {
             res.send({error: error})
         }
         return next()
-
-        // const { register } = req.params 
-
-        // try {
-        //     const user = await User.findOne({ register })
-        //     console.log(user)
-        //     console.log(user._id)
-        //     const notifications = await Notifications.find({ user: user._id }).sort({createdAt: -1}).populate(['user'])
-        //     res.send({ notifications: notifications })
-        // } catch(error) {
-        //     res.send({error: error})
-        // }
-        // return next()
     })    
 }
