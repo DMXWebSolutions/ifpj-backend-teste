@@ -1,0 +1,14 @@
+{
+    "_id": "heroku_n3g52qtt.ifpjapp",
+    "user": "ifpjapp",
+    "db": "heroku_n3g52qtt",
+    "roles": [
+        {
+            "role": "dbOwner",
+            "db": "heroku_n3g52qtt"
+        }
+    ]
+}
+
+heroku config:set MONGOLAB_URI=mongodb://ifpjapp:ifpj123@ds131971.mlab.com:31971/heroku_n3g52qtt
+heroku config:set AUTH_SECRET=4bc12841b901f1716f71ab76b99699d6
