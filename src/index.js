@@ -1,5 +1,5 @@
 // const port = 3456
-const port = 3000
+const port = 3001
 
 require('dotenv').config()
 const server = require('./server')

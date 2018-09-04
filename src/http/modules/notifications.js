@@ -1,6 +1,6 @@
 // const Notifications = require('../../services/mongo/models/notifications')
 // const User = require('../../services/mongo/models/users')
-
+<div className="mbc-10"></div>
 
 const db = require('../../services/app-services')
 
@@ -42,17 +42,19 @@ const db = require('../../services/app-services')
 module.exports = function notifications(server) {
 
     server.post('/notifications/classroom', async (req, res, next) => {
-
-        const { register, title, classroom, student, message } = req.body
-
+        const { register, title, classroom, student, message, urlfile } = req.body
         try {
             const notification = await db.notifications().save(register, title, classroom, student, message, urlfile)
-            res.send({ message: notification })   
-            
+            res.header('Content-Type', 'application/json');
+            res.send(200, { message: notification })  
+            console.log(notification)
+            return next()
         } catch(error) {
-            res.send(400, { error: error });
+            console.log(error)
+            res.send(404, { error: error });
+            next()
         }
-        return next()
+        
     })
 
     server.get('/notifications', async (req, res, next ) => {
@@ -60,10 +62,10 @@ module.exports = function notifications(server) {
         try {
             const notifications = await db.notifications().FindAll()
             res.send({ notifications: notifications })
-
         } catch(error) {
             res.send(422, {error})
         }
+
         return next()
     })
 

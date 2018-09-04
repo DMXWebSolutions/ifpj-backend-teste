@@ -39,11 +39,11 @@ const notifications = deps => {
             })
         },
 
-        save: (register, title, classroom, student = null, message, urlfile = null, ) => {
+        save: (register, title, classroom, student = null, message, urlFile = null, ) => {
             return new Promise((resolve, reject) => {
                 const { connection, errorHandler } = deps
       
-                connection.query('INSERT INTO notifications (register, title, classroom, student, message, url_file) VALUES (?, ?, ?, ?, ?, ?)', [ register, title, classroom, student, message, urlfile ], (error, results) => {
+                connection.query('INSERT INTO notifications (register, title, classroom, student, message, url_file) VALUES (?, ?, ?, ?, ?, ?)', [ register, title, classroom, student, message, urlFile ], (error, results) => {
                     if (error) {
                         errorHandler(error, `Falha ao enviar notificação`, reject)
                         return false
