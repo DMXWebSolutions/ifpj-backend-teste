@@ -34,8 +34,8 @@ module.exports = function auth(server) {
                 user: {
                     register: user.register,
                     name: user.name,
-                    profile: user.profile,
-                    class: user.codturm
+                    profiles: user.profiles,
+                    class: user.class
                 },
                 token: generateToken({ id: user.id })
             })
