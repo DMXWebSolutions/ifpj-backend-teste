@@ -12,7 +12,21 @@ module.exports = function auth(server) {
             expiresIn: 100000000
         })
     }
+    server.get('/users', async(req, res, next) => {
 
+        try {
+            res.send(
+                await db.users().FindAll()
+            )
+
+        } catch (error) {
+
+            console.log(error)
+
+            res.send({ error: error })
+        }
+        return next()
+    })
     server.post('/authenticate', async(req, res, next) => {
         const { register, password } = req.body
         

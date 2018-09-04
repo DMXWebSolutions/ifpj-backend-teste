@@ -43,7 +43,7 @@ module.exports = function notifications(server) {
 
     server.post('/notifications/classroom', async (req, res, next) => {
 
-        const { register, title, classroom, student, message, urlfile } = req.body
+        const { register, title, classroom, student, message } = req.body
 
         try {
             const notification = await db.notifications().save(register, title, classroom, student, message, urlfile)
@@ -78,7 +78,7 @@ module.exports = function notifications(server) {
         }
 
         if(notification) {
-            await Notifications.deleteOne({  _id: id })
+            await Notifications.deleteOne({  id: id })
             res.send({ messages: 'Notificação removida com sucesso'})
             next()
         }
