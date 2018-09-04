@@ -13,55 +13,6 @@ module.exports = function auth(server) {
         })
     }
 
-    // server.del('/users/:register', async (req, res, next) => {
-        
-    //     const { register } = req.params
-    //     const user = await User.findOne({ register })
-
-    //     if(!user) {
-    //         res.send(400, { error : 'Usuario não encontrado'})
-    //         next()
-    //     }
-
-    //     if(user) {
-    //         await User.deleteOne({ register: register })
-    //         res.send({ messages: 'Usuario removido com sucesso'})
-    //         next()
-    //     }
-
-    // })
-
-    // server.post('/register', async (req, res, next) => {
-
-    //     const { register } = req.body
-
-    //     try {
-    //         if(await db.users())
-    //             return res.send({ error: 'Usuario já registrado'})
-
-    //         const user = await User.create(req.body)
-
-    //         user.password = undefined
-
-    //         // res.send({ user, token: generateToken({ id: user.id })})
-    //         res.send({message: 'Usuario Cadastrado com Sucesso!' })
-
-    //     } catch(error) {
-    //         console.log(error)
-    //         return res.send({ error: 'Falha ao se cadastrar'});
-    //     }
-    //     next()
-    // })
-
-    // server.get('/users', async(req, res, next) => {
-    //     try {
-    //         const users = await User.find({})
-    //         res.send({users: users })
-    //     } catch(error) {
-    //         res.send({ error: error})
-    //     }
-    // })
-
     server.post('/authenticate', async(req, res, next) => {
         const { register, password } = req.body
         
