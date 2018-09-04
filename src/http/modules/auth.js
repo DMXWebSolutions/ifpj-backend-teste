@@ -95,25 +95,7 @@ module.exports = function auth(server) {
             res.send({error: error})
         }
     })
-
-    server.del('/users/:register', async (req, res, next) => {
-        
-        const response = await db.users().FindByRegister(register)
-        const user = response.user[0]
-
-        if(!user) {
-            res.send(400, { error : 'Usuario não encontrado'})
-            next()
-        }
-
-        if(user) {
-            await User.deleteOne({ register: register })
-            res.send({ messages: 'Usuario removido com sucesso'})
-            next()
-        }
-
-    })
-
+    
     server.post('/register', async (req, res, next) => {
 
         const { name, register, password, classroom, profiles  } = req.body
@@ -135,4 +117,23 @@ module.exports = function auth(server) {
         }
         next()
     })
+    
+    server.del('/users/:register', async (req, res, next) => {
+        
+        const response = await db.users().FindByRegister(register)
+        const user = response.user[0]
+
+        if(!user) {
+            res.send(400, { error : 'Usuario não encontrado'})
+            next()
+        }
+
+        if(user) {
+            await User.deleteOne({ register: register })
+            res.send({ messages: 'Usuario removido com sucesso'})
+            next()
+        }
+
+    })
+
 }
