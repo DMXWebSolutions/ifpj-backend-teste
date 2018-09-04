@@ -25,7 +25,7 @@ const users = deps => {
                 })
             })
         },
-        save: (name, register, password, classroom, profiles) => {
+        save: (name, register, password, classroom = null, profiles) => {
             return new Promise((resolve, reject) => {
                 const { connection, errorHandler } = deps
       
