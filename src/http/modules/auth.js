@@ -101,10 +101,16 @@ module.exports = function auth(server) {
         const { name, register, password, classroom, profiles  } = req.body
 
         try {
-            if(await db.users().FindByRegister(register))
-                return res.send({ error: 'Usuario já registrado'})
 
-            const user = await db.users().save(name, register, password, classroom, profiles)
+            const response = await db.users().FindByRegister(register)
+            const user = response.user[0]
+
+            if(user) {
+                res.send(400, { error: 'Usuario já registrado'})
+                next()
+            }
+
+            await db.users().save(name, register, password, classroom, profiles)
 
             // user.password = undefined
 
@@ -120,6 +126,8 @@ module.exports = function auth(server) {
     
     server.del('/users/:register', async (req, res, next) => {
         
+        const { register } = req.params
+
         const response = await db.users().FindByRegister(register)
         const user = response.user[0]
 
@@ -129,8 +137,8 @@ module.exports = function auth(server) {
         }
 
         if(user) {
-            await User.deleteOne({ register: register })
-            res.send({ messages: 'Usuario removido com sucesso'})
+            await db.users().del(register)
+            res.send({ messages: `Usuario de matricula ${register} removido com sucesso`})
             next()
         }
 

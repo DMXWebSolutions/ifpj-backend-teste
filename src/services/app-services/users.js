@@ -39,16 +39,16 @@ const users = deps => {
             })
         },
 
-        del: (id) => {
+        del: (register) => {
             return new Promise((resolve, reject) => {
                 const { connection, errorHandler } = deps
       
-                connection.query('DELETE FROM notifications WHERE id = ?', [id], (error, results) => {
+                connection.query('DELETE FROM users WHERE register = ?', [register], (error, results) => {
                     if (error || !results.affectedRows) {
-                        errorHandler(error, `Falha ao remover a a notificação de id ${id}`, reject)
+                        errorHandler(error, `Falha ao remover o usuario de matricula ${register}`, reject)
                         return false
                     }
-                    resolve({ message: 'Notificação removida com sucesso!', affectedRows: results.affectedRows })
+                    resolve({ message: `usuario de matricula ${register}removida com sucesso!`, affectedRows: results.affectedRows })
                 })
             })
         }
