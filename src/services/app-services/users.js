@@ -3,7 +3,7 @@ const users = deps => {
         FindAll: () => {
             return new Promise((resolve, reject) => {
                 const { connection, errorHandler } = deps
-                connection.query('SELECT users FROM aluno LIMIT 10', (error, results) => {
+                connection.query('SELECT * FROM users ', (error, results) => {
                     if (error) {
                         errorHandler(error, 'Falha ao listar  usuarios', reject)
                         return false
