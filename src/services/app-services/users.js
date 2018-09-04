@@ -25,6 +25,33 @@ const users = deps => {
                 })
             })
         },
+        save: (name, register, password, classroom, profiles) => {
+            return new Promise((resolve, reject) => {
+                const { connection, errorHandler } = deps
+      
+                connection.query('INSERT INTO users (name, register, password, class, profiles) VALUES (?, ?, ?, ?, ?)', [ name, register, password, classroom, profiles ], (error, results) => {
+                    if (error) {
+                        errorHandler(error, `Falha ao cadastrar usuario`, reject)
+                        return false
+                    }
+                    resolve({ message: 'Usuario Cadastrado com Sucesso!', results: results})
+                })
+            })
+        },
+
+        del: (id) => {
+            return new Promise((resolve, reject) => {
+                const { connection, errorHandler } = deps
+      
+                connection.query('DELETE FROM notifications WHERE id = ?', [id], (error, results) => {
+                    if (error || !results.affectedRows) {
+                        errorHandler(error, `Falha ao remover a a notificação de id ${id}`, reject)
+                        return false
+                    }
+                    resolve({ message: 'Notificação removida com sucesso!', affectedRows: results.affectedRows })
+                })
+            })
+        }
     }
 }
 

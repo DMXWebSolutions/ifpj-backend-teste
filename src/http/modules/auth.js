@@ -95,4 +95,44 @@ module.exports = function auth(server) {
             res.send({error: error})
         }
     })
+
+    server.del('/users/:register', async (req, res, next) => {
+        
+        const response = await db.users().FindByRegister(register)
+        const user = response.user[0]
+
+        if(!user) {
+            res.send(400, { error : 'Usuario não encontrado'})
+            next()
+        }
+
+        if(user) {
+            await User.deleteOne({ register: register })
+            res.send({ messages: 'Usuario removido com sucesso'})
+            next()
+        }
+
+    })
+
+    server.post('/register', async (req, res, next) => {
+
+        const { name, register, password, classroom, profiles  } = req.body
+
+        try {
+            if(await db.users().FindByRegister(register))
+                return res.send({ error: 'Usuario já registrado'})
+
+            const user = await db.users().save(name, register, password, classroom, profiles)
+
+            // user.password = undefined
+
+            // res.send({ user, token: generateToken({ id: user.id })})
+            res.send({message: 'Usuario Cadastrado com Sucesso!' })
+
+        } catch(error) {
+            console.log(error)
+            return res.send({ error: 'Falha ao se cadastrar usuario'});
+        }
+        next()
+    })
 }
