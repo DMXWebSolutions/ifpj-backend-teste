@@ -3,12 +3,12 @@ const notifications = deps => {
         FindAll: () => {
             return new Promise((resolve, reject) => {
                 const { connection, errorHandler } = deps
-                connection.query('SELECT * FROM notifications GROUP BY title ORDER BY title', (error, results) => {
+                connection.query('SELECT * FROM notifications', (error, results) => {
                     if (error) {
                         errorHandler(error, 'Falha ao listar notificações', reject)
                         return false
                     }
-                    resolve({ users: results }) 
+                    resolve({ results }) 
                 })
             })
         },
