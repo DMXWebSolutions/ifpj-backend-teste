@@ -3,7 +3,7 @@ const notifications = deps => {
         FindAll: () => {
             return new Promise((resolve, reject) => {
                 const { connection, errorHandler } = deps
-                connection.query('SELECT * FROM notifications', (error, results) => {
+                connection.query('SELECT * FROM notifications order by id', (error, results) => {
                     if (error) {
                         errorHandler(error, 'Falha ao listar notificações', reject)
                         return false
