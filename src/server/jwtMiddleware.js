@@ -22,7 +22,7 @@ const jwtMiddleware = (deps) => {
       // }
 
       jwt.verify(token, authConfig.secret, (err, decoded) => {
-        if (err) return res.status(401).send({ error: 'Token invalid' });
+        if (err) return res.send(401, { error: 'Token invalid' });
     
         req.userId = decoded.id;
         return next();

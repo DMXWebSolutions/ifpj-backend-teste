@@ -1,9 +1,7 @@
 // const Notifications = require('../../services/mongo/models/notifications')
 // const User = require('../../services/mongo/models/users')
-<div className="mbc-10"></div>
 
 const db = require('../../services/app-services')
-
 
 // const duplicateRemove =  async () => { //Remove os dados duplicados no banco MONGODB
 
@@ -46,13 +44,9 @@ module.exports = function notifications(server) {
         try {
             const notification = await db.notifications().save(register, title, classroom, student, message, urlfile)
             res.header('Content-Type', 'application/json');
-            res.send(200, { message: notification })  
-            console.log(notification)
-            return next()
+            res.send(200, { message: notification })      
         } catch(error) {
-            console.log(error)
             res.send(404, { error: error });
-            next()
         }
         
     })
