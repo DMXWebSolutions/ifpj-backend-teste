@@ -21,7 +21,7 @@ const notifications = deps => {
                         reject(error, 'Falha ao listar notificações', reject)
                         return false
                     }
-                    resolve({ user: results }) 
+                    resolve({ results }) 
                 })
             })
         },
