@@ -29,7 +29,7 @@ const users = deps => {
             return new Promise((resolve, reject) => {
                 const { connection, errorHandler } = deps
       
-                connection.query('INSERT INTO users (name, register, password, class, profiles) VALUES (?, ?, ?, ?, ?)', [ name, register, password, classroom, profiles ], (error, results) => {
+                connection.query('INSERT INTO users (name, register, password, classroom, profiles) VALUES (?, ?, ?, ?, ?)', [ name, register, password, classroom, profiles ], (error, results) => {
                     if (error) {
                         errorHandler(error, `Falha ao cadastrar usuario`, reject)
                         return false
