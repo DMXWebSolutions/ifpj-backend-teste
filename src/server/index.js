@@ -4,7 +4,7 @@ const routes = require('../http/routes')
 const cors = require('./cors')
 const jwtMiddleware = require('./jwtMiddleware')
 
-const exclusions = ['/authenticate', '/register']
+const exclusions = ['/authenticate', '/register', '/classrooms']
 
 server.pre(cors.preflight)
 server.use(cors.actual)
